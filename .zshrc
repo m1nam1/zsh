@@ -73,9 +73,9 @@ setopt HIST_REDUCE_BLANKS
 #====================
 # PATH
 #====================
+export PATH=/usr/local/bin:$PATH
 
 # pyenv
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
-
