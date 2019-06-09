@@ -15,57 +15,80 @@ ZSH_THEME="wedisagree"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
-
-# 履歴に日時を表示
-HIST_STAMPS="mm/dd/yyyy"
+plugins=()
 
 source $ZSH/oh-my-zsh.sh
 
 #====================
-# Basic Configure
+# Zsh Options
 #====================
 
-# 言語・文字コード設定
+# Basic Configure
 export LANG=ja_JP.UTF-8
+setopt no_beep
 
-# ビープ音を無効化
-setopt NO_BEEP
+# Change Directory
+setopt auto_cd
+setopt auto_pushd
+setopt pushd_ignore_dups
+setopt correct
 
-# 自動でディレクトリをスタックに保存
-setopt AUTO_PUSHD
-
-# pushd の履歴は残さない
-setopt PUSHD_IGNORE_DUPS
-
-# zsh-syntax-highlighting
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-# zsh-completions (補完強化)
-fpath=(/usr/local/share/zsh-completions $fpath)
-
-# コマンドの補完
+# Completion
+setopt always_to_end
+setopt complete_in_word
 autoload -U compinit
-compinit -u
+compinit -C
+
+# History
+HIST_STAMPS="mm/dd/yyyy"
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=10000
+SAVEHIST=10000000
+setopt hist_ignore_dups
+setopt hist_reduce_blanks
+
+#====================
+# Aliases
+#====================
+
+alias rm='rm -i'
+alias reload='exec $SHELL -l'
+alias op='open .'
+
+# GitHub Desktop
+alias gh='github .'
+
+# Goland
+alias gl='goland .'
+
+# PyCharm
+alias ch='charm .'
+
+#====================
+# Zplug
+#====================
+
+# Syntax highlighting
+zplug "zsh-users/zsh-syntax-highlighting"
+
+# Completion
+zplug "zsh-users/zsh-autosuggestions"
+zplug "zsh-users/zsh-completions", use:'src/_*', lazy:true
+zplug "zsh-users/zsh-history-substring-search"
+
+## Install required packages
+zplug check --verbose || zplug install
+
+zplug load
+
+#====================
+# Functions
+#====================
 
 # cd の後に ls を実行
 chpwd() { ls }
 
-#====================
-# History
-#====================
-
-# 履歴ファイルの保存先
-HISTFILE="$HOME/.zsh_history"
-
-# メモリに保存される履歴の件数
-HISTSIZE=10000
-
-# 履歴ファイルに保存される履歴の件数
-SAVEHIST=10000000
-
-# 重複を記録しない
-setopt hist_ignore_dups
-
-# 余分な空白を削除して履歴を保存
-setopt HIST_REDUCE_BLANKS
+# .zshrc自動コンパイル
+if [ ~/.zshrc -nt ~/.zshrc.zwc ]; then
+  zcompile ~/.zshrc
+fi
