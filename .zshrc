@@ -23,11 +23,11 @@ source $ZSH/oh-my-zsh.sh
 # Zsh Options
 #====================
 
-# Basic Configure
+# Basic configure
 export LANG=ja_JP.UTF-8
 setopt no_beep
 
-# Change Directory
+# Change directory
 setopt auto_cd
 setopt auto_pushd
 setopt pushd_ignore_dups
@@ -68,6 +68,8 @@ alias ch='charm .'
 # Zplug
 #====================
 
+zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+
 # Syntax highlighting
 zplug "zsh-users/zsh-syntax-highlighting"
 
@@ -75,6 +77,13 @@ zplug "zsh-users/zsh-syntax-highlighting"
 zplug "zsh-users/zsh-autosuggestions"
 zplug "zsh-users/zsh-completions", use:'src/_*', lazy:true
 zplug "zsh-users/zsh-history-substring-search"
+
+# Fuzzy finder
+zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
+
+# Change directory
+zplug "b4b4r07/enhancd", use:init.sh
+ENHANCD_HOOK_AFTER_CD=ls
 
 ## Install required packages
 zplug check --verbose || zplug install
@@ -84,9 +93,6 @@ zplug load
 #====================
 # Functions
 #====================
-
-# cd の後に ls を実行
-chpwd() { ls }
 
 # .zshrc自動コンパイル
 if [ ~/.zshrc -nt ~/.zshrc.zwc ]; then
